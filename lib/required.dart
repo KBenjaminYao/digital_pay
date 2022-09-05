@@ -83,7 +83,6 @@ class ApiDCI{
   
   static Future gestSellerInfo(String accessToken) async {
     var response =  await get("$requestLink/", "seller",{"code": accessToken});
-    //  var response =  await custom("""SELECT entreprises.*,abonnements.id AS abonnement_id,abonnements.libelle AS abonnement_libelle,abonnements.duree AS abonnement_duree,abonnements.amount AS abonnement_amount,abonnements.description AS abonnement_description,souscriptions.id AS souscription_id,souscriptions.statut AS souscription_statut,souscriptions.date_debut AS souscription_date_debut,souscriptions.date_fin AS souscription_date_fin FROM entreprises,abonnements,souscriptions WHERE entreprises.code="$accessToken" AND souscriptions.entreprise_id=entreprises.id AND souscriptions.abonnement_id=abonnements.id;""");
     if (response != "error") {
       Map sellerData = jsonDecode(response);
       if (sellerData.isNotEmpty) {
