@@ -12,49 +12,51 @@ void unloading(BuildContext context, [Map? data]) {
   Navigator.pop(context, data);
 }
 
- loading(context){
-  showDialog(context: context, builder: (c){
-    return WillPopScope(
-      onWillPop: (){
-        return Future.value(false);
-      },
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: Container(
-            width: 180,
-            height: 80,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(top: BorderSide(color: primaryColor, width: 5)),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SpinKitCircle(
-                  color: primaryColor,
-                  size: 40,
+loading(context) {
+  showDialog(
+      context: context,
+      builder: (c) {
+        return WillPopScope(
+          onWillPop: () {
+            return Future.value(true);
+          },
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: Container(
+                width: 180,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border:
+                      Border(top: BorderSide(color: primaryColor, width: 5)),
                 ),
-                const Text("Chargement...")
-              ],
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SpinKitCircle(
+                      color: primaryColor,
+                      size: 40,
+                    ),
+                    const Text("Chargement...")
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-    );
-  });
+        );
+      });
 }
 
-toastMsg(String msg, [String? type = "danger"]){
+toastMsg(String msg, [String? type = "danger"]) {
   Fluttertoast.showToast(
-    msg: msg,
-    backgroundColor: type == "danger" ? Colors.red : Colors.green,
-    gravity: ToastGravity.TOP,
-    toastLength: Toast.LENGTH_LONG
-  );
+      msg: msg,
+      backgroundColor: type == "danger" ? Colors.red : Colors.green,
+      gravity: ToastGravity.TOP,
+      toastLength: Toast.LENGTH_LONG);
 }
 
-class ApiDCI{
+class ApiDCI {
   static Future get(uri, path, [Map? params, String? _token]) async {
     var q = "";
     var link = "";
@@ -71,8 +73,9 @@ class ApiDCI{
     }
     try {
       var response = await http.get(Uri.parse(link), headers: _setHeaders());
-      if (response.statusCode == 200) {
-        return response.body;
+      var result = response.body;
+      if (response.statusCode == 200 && result != "error") {
+        return jsonDecode(result);
       } else {
         return "error";
       }
@@ -80,71 +83,46 @@ class ApiDCI{
       return "error";
     }
   }
-  
+
   static Future gestSellerInfo(String accessToken) async {
-    var response =  await get("$requestLink/", "seller",{"code": accessToken});
-    if (response != "error") {
-      Map sellerData = jsonDecode(response);
-      if (sellerData.isNotEmpty) {
-        return sellerData;
-      } else {
-        return {};
-      }
-      
-    } else {
-      return "error";
-    }
-  }
-  static Future paiement([Map? params]) async {
-    var q = "";
-    if (params != null) {
-      q = "/";
-      params.forEach((key, value) {
-        q += value.toString() + "/";
-      });
-      q = q.substring(0, q.length - 1);
-    }
-
-    try {
-      var response = await http.get(Uri.parse(requestLink+q), headers: _setHeaders());
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else {
-        return "error";
-      }
-    } catch (e) {
-      return "error";
-    }
+    var response = await get("$apiLink/", "seller", {"code": accessToken});
+    return response;
   }
 
-  static Future verification(String accesToken) async {
-    String link = responseLink+"/"+accesToken;
-    try {  
-      var response = await http.get(Uri.parse(link), headers: _setHeaders());
-      if (response.statusCode == 200) {
-        Map resultTrans = jsonDecode(response.body);
-        return resultTrans;
-      } else {
-        return "error";
-      }
-    } catch (e) {
-      return "error";
-    }
+  static Future paiement({
+    required int amount,
+    required String accessToken,
+    required String number,
+    required String operator,
+  }) async {
+    var response = await get("$apiLink/", "paiement", {
+      "access_token": accessToken,
+      "amount": amount,
+      "number": "225"+number,
+      "operator": operator,
+    });
+    return response;
   }
 
+  static Future verification({required String accessToken}) async {
+    var response =
+        await get("$apiLink/", "verification", {"access_token": accessToken});
+    return response;
+  }
 
   static Future<bool> setErrorTransaction(String idTransaction) async {
     bool state = false;
-    await get(requestLink, "/seterror",{"id_transaction" : idTransaction}).then((value) {
+    await get(apiLink, "/seterror", {"id_transaction": idTransaction})
+        .then((value) {
       state = jsonDecode(value);
     });
     return state;
   }
 
   static _setHeaders() => {
-    'Content-type': 'application/json',
-    'Accept': 'application/json',
-  };
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+      };
 }
 
 var maskNumero = MaskTextInputFormatter(

@@ -23,14 +23,21 @@ class DigitalPay {
   /// ##### "TIME_OFF" : Temps du delai écoulé
   /// ##### "FAIL_TRANSACTION" : transaction échouée
   /// ##### "SUCCESS_TRANSACTION" : Transaction  effectuée
-  static Future<Map> checkout(
-      {required BuildContext context,
-      required accessToken,
-      required amount}) async {
+
+  static Future<Map> checkout({
+    required BuildContext context,
+    required accessToken,
+    required amount,
+    bool appBar = true,
+  }) async {
     try {
       Map result =
           await Navigator.push(context, MaterialPageRoute(builder: (c) {
-        return HomeDPay(accessToken: accessToken, amount: amount);
+        return HomeDPay(
+          accessToken: accessToken,
+          amount: amount,
+          appBar: appBar,
+        );
       }));
       return result;
     } catch (e) {
@@ -42,7 +49,7 @@ class DigitalPay {
   }
 
   static Future verification({required String transactionID}) async {
-    return await ApiDCI.verification(transactionID);
+    return await ApiDCI.verification(accessToken: transactionID);
   }
 }
 
@@ -50,17 +57,19 @@ class DigitalPay {
 class HomeDPay extends StatefulWidget {
   /// Obtenir votre accessToken [accessToken] via https://pay.digital.ci
   final String accessToken;
+  final bool appBar;
 
   /// Le montant [amount] de la transaction doit être supérieur à 10
   final int amount;
 
   final Function(dynamic)? waitResponse;
-  const HomeDPay(
-      {Key? key,
-      required this.accessToken,
-      required this.amount,
-      this.waitResponse})
-      : super(key: key);
+  const HomeDPay({
+    Key? key,
+    required this.accessToken,
+    required this.amount,
+    required this.appBar,
+    this.waitResponse,
+  }) : super(key: key);
 
   @override
   State<HomeDPay> createState() => _HomeDPayState();
@@ -103,7 +112,6 @@ class _HomeDPayState extends State<HomeDPay> {
 
   @override
   void initState() {
-
     counter = maxTime;
     Future.delayed(Duration.zero).then((value) {
       loading(context);
@@ -116,19 +124,15 @@ class _HomeDPayState extends State<HomeDPay> {
             });
           } else {
             if (mounted) {
-              unloading(context, {
-                "code": "NOT_PERMITED",
-                "message":
-                    "Désoler vous n'êtes pas autorisé à utiliser ce service!!!"
-              });
+              String message =
+                  "Désoler vous n'êtes pas autorisé à utiliser ce service!!!";
+              unloading(context, {"code": "NOT_PERMITED", "message": message});
             }
           }
         } else {
           if (mounted) {
-            unloading(context, {
-              "code": "SERVER_ERROR",
-              "message": "Désoler une erreur s'est produite!!!"
-            });
+            String message = "Désoler une erreur s'est produite!!!";
+            unloading(context, {"code": "SERVER_ERROR", "message": message});
           }
         }
       });
@@ -156,17 +160,13 @@ class _HomeDPayState extends State<HomeDPay> {
             setState(() {
               isReady = true;
             });
-            unloading(context, {
-              "code": "TIME_OFF",
-              "message": "Temps de la transaction écoulé!!!"
-            });
+            String message = "Temps de la transaction écoulé!!!";
+            unloading(context, {"code": "TIME_OFF", "message": message});
           }
         } else {
           if (mounted) {
-            unloading(context, {
-              "code": "SERVER_ERROR",
-              "message": "Désoler une erreur s'est produite!!!"
-            });
+            String message = "Désoler une erreur s'est produite!!!";
+            unloading(context, {"code": "SERVER_ERROR", "message": message});
           }
         }
       });
@@ -176,9 +176,13 @@ class _HomeDPayState extends State<HomeDPay> {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: primaryColor,
-        ),
+        appBar: widget.appBar
+            ? AppBar(
+                backgroundColor: primaryColor,
+                title: Text(userInfo["name"] ?? ""),
+                centerTitle: true,
+              )
+            : null,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
           child: ListView(
@@ -466,12 +470,12 @@ class _HomeDPayState extends State<HomeDPay> {
 
   void momoPaiementAction() {
     loading(context);
-    ApiDCI.paiement({
-      "montant": widget.amount,
-      "entreprise": widget.accessToken,
-      "numero": unMask(contactController.text),
-      "fournisseur": operator,
-    }).then((value) {
+    ApiDCI.paiement(
+      amount: widget.amount,
+      accessToken: widget.accessToken,
+      number: unMask(contactController.text),
+      operator: operator,
+    ).then((value) {
       unloading(context);
       if (value != "error") {
         Map data = {};
@@ -513,7 +517,7 @@ class _HomeDPayState extends State<HomeDPay> {
   }
 
   verificationTrans(String idTransaction) async {
-    await ApiDCI.verification(idTransaction).then((value) {
+    await ApiDCI.verification(accessToken: idTransaction).then((value) {
       if (value != "error") {
         if (value["status"] == "FAILED") {
           _timer?.cancel();
@@ -527,9 +531,10 @@ class _HomeDPayState extends State<HomeDPay> {
             unloading(context, result);
           }
         } else if (value["status"] == "SUCCESSFUL") {
+          String message = "Transaction échouée!!!";
           Map result = {
             "code": "SUCCESS_TRANSACTION",
-            "message": "Transaction échouée!!!",
+            "message": message,
             "id": idTransaction
           };
           result.addAll(value);
@@ -539,10 +544,8 @@ class _HomeDPayState extends State<HomeDPay> {
         }
       } else {
         if (mounted) {
-          unloading(context, {
-            "code": "SERVER_ERROR",
-            "message": "Désoler une erreur s'est produite!!!"
-          });
+          String message = "Désoler une erreur s'est produite!!!";
+          unloading(context, {"code": "SERVER_ERROR", "message": message});
         }
       }
     });

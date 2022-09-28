@@ -64,10 +64,11 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               //Launching the checkout request
               DigitalPay.checkout(
-                      context: context,
-                      accessToken: "MY_ACCESS_TOKEN",
-                      amount: 10)
-                  .then((result) {
+                context: context,
+                accessToken: "ROBGZP0VTEM22",
+                // accessToken: "ROBGZP0VTEM22",
+                amount: 10,
+              ).then((result) {
                 //result of the request
                 print(result);
               });
