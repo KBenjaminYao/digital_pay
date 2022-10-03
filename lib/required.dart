@@ -98,7 +98,7 @@ class ApiDCI {
     var response = await get("$apiLink/", "paiement", {
       "access_token": accessToken,
       "amount": amount,
-      "number": "225"+number,
+      "number": "225" + number,
       "operator": operator,
     });
     return response;
@@ -111,12 +111,11 @@ class ApiDCI {
   }
 
   static Future<bool> setErrorTransaction(String idTransaction) async {
-    bool state = false;
-    await get(apiLink, "/seterror", {"id_transaction": idTransaction})
-        .then((value) {
-      state = jsonDecode(value);
-    });
-    return state;
+    try {
+      return await get(apiLink, "/seterror", {"id_transaction": idTransaction});
+    } catch (e) {
+      return false;
+    }
   }
 
   static _setHeaders() => {
