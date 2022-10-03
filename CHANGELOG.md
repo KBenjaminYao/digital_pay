@@ -1,3 +1,7 @@
+## 1.0.2
+
+* TODO: Migration iOS.
+
 ## 1.0.1
 
 * TODO: Correction de Bugs.

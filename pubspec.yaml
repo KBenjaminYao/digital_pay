@@ -1,6 +1,6 @@
 name: digital_pay
 description: This package allows you to make your payments safely. Designed to make your task easier with a simple widget.
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/KBenjaminYao/digital_pay.git
 
 environment:
