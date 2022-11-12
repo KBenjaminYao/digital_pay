@@ -84,7 +84,7 @@ class _HomeDPayState extends State<HomeDPay> {
       true
     ],
     "wave": [
-      "https://raw.githubusercontent.com/KBenjaminYao/digital_pay/main/assets/wave.webp",
+      "https://raw.githubusercontent.com/KBenjaminYao/digital_pay/main/assets/wave.png",
       "wave",
       true
     ],
