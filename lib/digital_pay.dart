@@ -99,7 +99,7 @@ class _HomeDPayState extends State<HomeDPay> {
     //   false
     // ],
     "visa": [
-      "https://raw.githubusercontent.com/KBenjaminYao/digital_pay/main/assets/visa.jpg",
+      "https://raw.githubusercontent.com/KBenjaminYao/digital_pay/main/assets/visa.png",
       "VISA",
       false
     ]
