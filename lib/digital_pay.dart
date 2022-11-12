@@ -79,22 +79,27 @@ class HomeDPay extends StatefulWidget {
 class _HomeDPayState extends State<HomeDPay> {
   Map assets = {
     "momo": [
-      "https://www.ubabenin.com/wp-content/uploads/sites/6/2022/04/245.png",
+      "https://raw.githubusercontent.com/KBenjaminYao/digital_pay/main/assets/momo.png",
       "MTN",
       true
     ],
-    "moov": [
-      "https://play-lh.googleusercontent.com/ON1Rr1bNthJnb-DEEu4ktgmKEZ9uvvrjg9QI84YltjtcD73peOF6ARZXRAogrUYT4Q",
-      "MOOV",
-      false
+    "wave": [
+      "https://raw.githubusercontent.com/KBenjaminYao/digital_pay/main/assets/wave.webp",
+      "wave",
+      true
     ],
-    "orange": [
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSf6yZAUhceAOD3lZdI3Fy1kdI61bWN6cHuKJufaj84sYM_xrSLwzQK0ud7spfFKT7gtnM&usqp=CAU",
-      "OM",
-      false
-    ],
+    // "moov": [
+    //   "https://raw.githubusercontent.com/KBenjaminYao/digital_pay/main/assets/moov.png",
+    //   "MOOV",
+    //   false
+    // ],
+    // "orange": [
+    //   "https://raw.githubusercontent.com/KBenjaminYao/digital_pay/main/assets/orange.png",
+    //   "OM",
+    //   false
+    // ],
     "visa": [
-      "https://img2.freepng.fr/20180814/oqo/kisspng-mastercard-visa-bank-card-portable-network-graphic--5b72ceb25742b5.6910264415342506743574.jpg",
+      "https://raw.githubusercontent.com/KBenjaminYao/digital_pay/main/assets/visa.jpg",
       "VISA",
       false
     ]
@@ -205,12 +210,10 @@ class _HomeDPayState extends State<HomeDPay> {
                             buttonPaiement(assets["momo"][0], assets["momo"][1],
                                 "momo", assets["momo"][2], false),
                             buttonPaiement(
-                                assets["orange"][0],
-                                assets["orange"][1],
-                                "orange",
-                                assets["orange"][2]),
-                            buttonPaiement(assets["moov"][0], assets["moov"][1],
-                                "moov", assets["moov"][2]),
+                                assets["wave"][0],
+                                assets["wave"][1],
+                                "wave",
+                                assets["wave"][2]),
                             buttonPaiement(assets["visa"][0], assets["visa"][1],
                                 "visa", assets["visa"][2]),
                           ],
