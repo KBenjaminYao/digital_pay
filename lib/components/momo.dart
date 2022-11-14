@@ -10,7 +10,8 @@ import 'package:wc_form_validators/wc_form_validators.dart';
 class MomoWidget extends StatefulWidget {
   final int amount;
   final String accessToken;
-  const MomoWidget({Key? key, required this.amount, required this.accessToken}) : super(key: key);
+  const MomoWidget({Key? key, required this.amount, required this.accessToken})
+      : super(key: key);
 
   @override
   State<MomoWidget> createState() => _MomoWidgetState();

@@ -31,17 +31,19 @@ class _VisaWidgetState extends State<VisaWidget> {
             initialUrl:
                 "http://192.168.43.94:8000/api/gtb/form?access_token=${widget.accessToken}&amount=${widget.amount}",
           ),
-           !isReady ?Positioned(
-             top: 0,
-              child: Container(
-                margin: EdgeInsets.only(top: 20),
-                width: MediaQuery.of(context).size.width - 50,
-                child: SpinKitDualRing(
-            color: primaryColor,
-            size: 80,
-            lineWidth: 10,
-          ),
-              )) : Container()
+          !isReady
+              ? Positioned(
+                  top: 0,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 20),
+                    width: MediaQuery.of(context).size.width - 50,
+                    child: SpinKitDualRing(
+                      color: primaryColor,
+                      size: 80,
+                      lineWidth: 10,
+                    ),
+                  ))
+              : Container()
         ],
       ),
     );

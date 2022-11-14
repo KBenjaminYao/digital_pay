@@ -63,7 +63,7 @@ class _WaveWidgetState extends State<WaveWidget> {
                         errorTraitement();
                         return;
                       }
-                      
+
                       String urlLaunch = result["wave_launch_url"];
                       if (urlLaunch.isNotEmpty) {
                         setState(() {

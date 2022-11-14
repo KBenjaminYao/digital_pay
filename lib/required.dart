@@ -60,7 +60,7 @@ class ApiDCI {
   static Future get(uri, path, [Map? params, String? _token]) async {
     var q = "";
     var link = "";
-    path = "/"+path;
+    path = "/" + path;
     if (params != null) {
       q = "?";
 
@@ -118,11 +118,11 @@ class ApiDCI {
   }
 
   static Future verificationWave({required String id}) async {
-    var response =
-        await get("$apiLink/wave", "verification", {"id": id});
+    var response = await get("$apiLink/wave", "verification", {"id": id});
     return response;
   }
-   static Future verification({required String accessToken}) async {
+
+  static Future verification({required String accessToken}) async {
     var response =
         await get(apiLink, "verification", {"access_token": accessToken});
     return response;
