@@ -60,6 +60,7 @@ class ApiDCI {
   static Future get(uri, path, [Map? params, String? _token]) async {
     var q = "";
     var link = "";
+    path = "/"+path;
     if (params != null) {
       q = "?";
 
@@ -74,6 +75,7 @@ class ApiDCI {
     try {
       var response = await http.get(Uri.parse(link), headers: _setHeaders());
       var result = response.body;
+      print(link);
       if (response.statusCode == 200 && result != "error") {
         return jsonDecode(result);
       } else {
@@ -85,7 +87,7 @@ class ApiDCI {
   }
 
   static Future gestSellerInfo(String accessToken) async {
-    var response = await get("$apiLink/", "seller", {"code": accessToken});
+    var response = await get(apiLink, "seller", {"code": accessToken});
     return response;
   }
 
@@ -95,7 +97,7 @@ class ApiDCI {
     required String number,
     required String operator,
   }) async {
-    var response = await get("$apiLink/", "paiement", {
+    var response = await get(apiLink, "paiement", {
       "access_token": accessToken,
       "amount": amount,
       "number": "225" + number,
@@ -104,15 +106,31 @@ class ApiDCI {
     return response;
   }
 
-  static Future verification({required String accessToken}) async {
+  static Future paiementWave({
+    required int amount,
+    required String accessToken,
+  }) async {
+    var response = await get("$apiLink/wave", "paiement", {
+      "amount": amount,
+      "access_token": accessToken,
+    });
+    return response;
+  }
+
+  static Future verificationWave({required String id}) async {
     var response =
-        await get("$apiLink/", "verification", {"access_token": accessToken});
+        await get("$apiLink/wave", "verification", {"id": id});
+    return response;
+  }
+   static Future verification({required String accessToken}) async {
+    var response =
+        await get(apiLink, "verification", {"access_token": accessToken});
     return response;
   }
 
   static Future<bool> setErrorTransaction(String idTransaction) async {
     try {
-      return await get(apiLink, "/seterror", {"id_transaction": idTransaction});
+      return await get(apiLink, "seterror", {"id_transaction": idTransaction});
     } catch (e) {
       return false;
     }

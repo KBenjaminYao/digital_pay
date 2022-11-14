@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
               DigitalPay.checkout(
                 context: context,
                 accessToken: "LETUD85IYAO22",
-                amount: 1000,
+                amount: 2500,
               ).then((result) {
                 print(result);
               });
