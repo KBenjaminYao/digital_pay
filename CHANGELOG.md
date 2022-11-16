@@ -10,7 +10,7 @@
 
 * TODO: Migration iOS.
 
-## 1.0.2
+## 1.0.3
 
 * TODO: Intégration de WAVE
 * TODO: Intégration de VISA/MASTERCARD
