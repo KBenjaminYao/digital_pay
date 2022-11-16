@@ -1,11 +1,16 @@
-## 1.0.2
+## 1.0.0
 
-* TODO: Migration iOS.
+* TODO: Initial release.
 
 ## 1.0.1
 
 * TODO: Correction de Bugs.
 
-## 1.0.0
+## 1.0.2
 
-* TODO: Initial release.
+* TODO: Migration iOS.
+
+## 1.0.2
+
+* TODO: Intégration de WAVE
+* TODO: Intégration de VISA/MASTERCARD

@@ -21,6 +21,7 @@ class _WaveWidgetState extends State<WaveWidget> {
   Timer? _timer;
   Timer? _timerVerif;
   Map data = {};
+  Map resultData = {};
 
   @override
   void dispose() {
@@ -31,117 +32,124 @@ class _WaveWidgetState extends State<WaveWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Material(
-            borderRadius: BorderRadius.circular(16),
-            color: !isReady
-                ? const Color(0xFF1dc8ff).withAlpha(100)
-                : const Color(0xFF1dc8ff),
-            child: InkWell(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Column(
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Material(
               borderRadius: BorderRadius.circular(16),
-              onTap: !isReady
-                  ? null
-                  : () async {
-                      loading(context);
-                      var result = await ApiDCI.paiementWave(
-                        amount: widget.amount,
-                        accessToken: widget.accessToken,
-                      );
-                      unloading(context);
-                      try {
-                        setState(() {
-                          data = result;
-                        });
-                        if (data.isEmpty) {
-                          errorTraitement();
-                          return;
-                        }
-                      } catch (e) {
-                        errorTraitement();
-                        return;
-                      }
+              color: !isReady
+                  ? const Color(0xFF1dc8ff).withAlpha(100)
+                  : resultData.isEmpty
+                      ? const Color(0xFF1dc8ff)
+                      : Colors.green.withOpacity(.8),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: !isReady
+                    ? null
+                    : resultData.isEmpty
+                        ? () async {
+                            loading(context);
+                            var result = await ApiDCI.paiementWave(
+                              amount: widget.amount,
+                              accessToken: widget.accessToken,
+                            );
+                            unloading(context);
+                            try {
+                              setState(() {
+                                data = result;
+                              });
+                              if (data.isEmpty) {
+                                errorTraitement();
+                                return;
+                              }
+                            } catch (e) {
+                              errorTraitement();
+                              return;
+                            }
 
-                      String urlLaunch = result["wave_launch_url"];
-                      if (urlLaunch.isNotEmpty) {
-                        setState(() {
-                          isReady = false;
-                        });
-                      } else {
-                        errorTraitement();
-                        _timer?.cancel();
-                        _timerVerif?.cancel();
-                        return;
-                      }
-                      final Uri _url = Uri.parse(
-                        result["wave_launch_url"],
-                      );
-                      if (!await launchUrl(
-                        _url,
-                        mode: LaunchMode.externalNonBrowserApplication,
-                      )) {
-                        errorTraitement();
-                        _timer?.cancel();
-                        _timerVerif?.cancel();
-                        return;
-                      } else {
-                        starTimer();
-                        verifTimer();
-                      }
-                    },
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text("PAYER AVEC WAVE",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                        color: !isReady ? Colors.grey : Colors.black,
-                        shadows: const [
-                          Shadow(
-                            color: Colors.white,
-                            offset: Offset(2, 1),
-                          )
-                        ]),
-                    textAlign: TextAlign.center),
+                            String urlLaunch = result["wave_launch_url"];
+                            if (urlLaunch.isNotEmpty) {
+                              setState(() {
+                                isReady = false;
+                              });
+                            } else {
+                              errorTraitement();
+                              _timer?.cancel();
+                              _timerVerif?.cancel();
+                              return;
+                            }
+                            final Uri _url = Uri.parse(
+                              result["wave_launch_url"],
+                            );
+                            if (!await launchUrl(
+                              _url,
+                              mode: LaunchMode.externalNonBrowserApplication,
+                            )) {
+                              errorTraitement();
+                              _timer?.cancel();
+                              _timerVerif?.cancel();
+                              return;
+                            } else {
+                              starTimer();
+                              verifTimer();
+                            }
+                          }
+                        : () {
+                            if (mounted) {
+                              unloading(context, resultData);
+                            }
+                          },
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child:
+                      Text(resultData.isEmpty ? "PAYER AVEC WAVE" : "TERMINER",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                            color: !isReady ? Colors.grey : Colors.white,
+                          ),
+                          textAlign: TextAlign.center),
+                ),
               ),
             ),
           ),
-        ),
-        !isReady
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: const [
-                      SpinKitThreeInOut(
-                        color: Color(0xFFf58231),
-                      ),
-                      Text("Traitement en cours...")
-                    ],
-                  ),
-                  CircleAvatar(
-                    radius: 22,
-                    backgroundColor: Colors.black12,
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(100)),
-                      child: Text(
-                        "$counter",
-                        style: const TextStyle(color: Colors.black),
-                      ),
+          !isReady
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: const [
+                        SpinKitThreeInOut(
+                          color: Color(0xFFf58231),
+                        ),
+                        Text("Traitement en cours...")
+                      ],
                     ),
-                  )
-                ],
-              )
-            : Container()
-      ],
+                    CircleAvatar(
+                      radius: 22,
+                      backgroundColor: Colors.black12,
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(100)),
+                        child: Text(
+                          "$counter",
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              : Container()
+        ],
+      ),
     );
   }
 
@@ -189,7 +197,7 @@ class _WaveWidgetState extends State<WaveWidget> {
     await ApiDCI.verificationWave(id: data["code"])
         .then((value) {
           if (value != "error") {
-            if (value["status"] == "FAILED") {
+            if (value["checkout_status"] == "expired") {
               _timerVerif?.cancel();
               _timer?.cancel();
               Map result = {
@@ -201,19 +209,20 @@ class _WaveWidgetState extends State<WaveWidget> {
               if (mounted) {
                 unloading(context, result);
               }
-            } else if (value["status"] == "SUCCESSFUL") {
+            } else if (value["checkout_status"] == "complete") {
               _timerVerif?.cancel();
               _timer?.cancel();
-              String message = "Transaction échouée!!!";
+              String message = "Transaction  effectuée !!!";
               Map result = {
                 "code": "SUCCESS_TRANSACTION",
                 "message": message,
                 "id": value["id"]
               };
               result.addAll(value);
-              if (mounted) {
-                unloading(context, result);
-              }
+              setState(() {
+                resultData = result;
+                isReady = true;
+              });
             }
           } else {
             if (mounted) {

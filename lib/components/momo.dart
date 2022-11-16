@@ -38,175 +38,178 @@ class _MomoWidgetState extends State<MomoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(bottom: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10.0),
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 4.0,
-                  spreadRadius: 1.0,
-                  color: secondaryColor,
-                ),
-              ],
-            ),
-            child: ListTile(
-              leading: Container(
-                padding: const EdgeInsets.only(top: 2),
-                child: GestureDetector(
-                    onTap: () {
-                      showCountryPicker(
-                        context: context,
-                        countryFilter: ["CI"],
-                        countryListTheme: CountryListThemeData(
-                          flagSize: 25,
-                          backgroundColor: Colors.white,
-                          textStyle: const TextStyle(
-                              fontSize: 16, color: Colors.blueGrey),
-                          bottomSheetHeight:
-                              250, // Optional. Country list modal height
-                          //Optional. Sets the border radius for the bottomsheet.
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20.0),
-                            topRight: Radius.circular(20.0),
-                          ),
-                          //Optional. Styles the search field.
-                          inputDecoration: InputDecoration(
-                            labelText: 'Rechercher',
-                            hintText: 'Recherchez un pays',
-                            prefixIcon: const Icon(Icons.search),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: const Color(0xFF8C98A8).withOpacity(0.2),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(bottom: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 1.0,
+                    spreadRadius: 1.0,
+                    color: secondaryColor,
+                  ),
+                ],
+              ),
+              child: ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: GestureDetector(
+                      onTap: () {
+                        showCountryPicker(
+                          context: context,
+                          countryFilter: ["CI"],
+                          countryListTheme: CountryListThemeData(
+                            flagSize: 25,
+                            backgroundColor: Colors.white,
+                            textStyle: const TextStyle(
+                                fontSize: 16, color: Colors.blueGrey),
+                            bottomSheetHeight:
+                                250, // Optional. Country list modal height
+                            //Optional. Sets the border radius for the bottomsheet.
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(20.0),
+                              topRight: Radius.circular(20.0),
+                            ),
+                            //Optional. Styles the search field.
+                            inputDecoration: InputDecoration(
+                              labelText: 'Rechercher',
+                              hintText: 'Recherchez un pays',
+                              prefixIcon: const Icon(Icons.search),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: const Color(0xFF8C98A8).withOpacity(0.2),
+                                ),
                               ),
                             ),
                           ),
+                          onSelect: (Country country) {
+                            setState(() {
+                              phoneCode = "+" + country.phoneCode;
+                            });
+                          },
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: Text(
+                          phoneCode,
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: primaryColor),
                         ),
-                        onSelect: (Country country) {
-                          setState(() {
-                            phoneCode = "+" + country.phoneCode;
-                          });
-                        },
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.only(top: 3),
-                      child: Text(
-                        phoneCode,
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: primaryColor),
-                      ),
-                    )),
-              ),
-              title: TextFormField(
-                enabled: isReady,
-                validator: Validators.compose([
-                  Validators.required("Le numéro est Oligatoire"),
-                  Validators.minLength(
-                      12, "Veuillez renseigner un numéro correct"),
-                  Validators.minLength(
-                      12, "Veuillez renseigner un numéro correct"),
-                  Validators.patternRegExp(
-                      RegExp(RegExp.escape("05")), "Numéro $operator incorrect")
-                ]),
-                controller: contactController,
-                inputFormatters: [maskNumero],
-                style:
-                    TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
-                keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(
-                  hintText: 'Numéro de téléphone',
-                  border: InputBorder.none,
-                  errorStyle: TextStyle(
-                    fontSize: 12,
-                    height: .06,
+                      )),
+                ),
+                title: TextFormField(
+                  enabled: isReady,
+                  validator: Validators.compose([
+                    Validators.required("Le numéro est Oligatoire"),
+                    Validators.minLength(
+                        12, "Veuillez renseigner un numéro correct"),
+                    Validators.minLength(
+                        12, "Veuillez renseigner un numéro correct"),
+                    Validators.patternRegExp(
+                        RegExp(RegExp.escape("05")), "Numéro $operator incorrect")
+                  ]),
+                  controller: contactController,
+                  inputFormatters: [maskNumero],
+                  style:
+                      TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+                  keyboardType: TextInputType.phone,
+                  decoration: const InputDecoration(
+                    hintText: 'Numéro de téléphone',
+                    border: InputBorder.none,
+                    errorStyle: TextStyle(
+                      fontSize: 12,
+                      height: .06,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          const Center(
-            child: Text(
-              "Sécurisé avec DIGITAL PAY",
-              style: TextStyle(color: Colors.grey),
+            const SizedBox(
+              height: 5,
             ),
-          ),
-          isReady
-              ? Container()
-              : Column(
-                  children: [
-                    ListTile(
-                      title: Text(
-                        failTransaction == null
-                            ? "Veuillez composer *133# choisir puis  l'option 1 pour confirmer la transaction"
-                            : "Nous n'avons pas pu procéder à la vérification de votre transaction",
-                        style: TextStyle(
-                            color: failTransaction == null
-                                ? Colors.black
-                                : Colors.red),
-                        textAlign: TextAlign.center,
-                      ),
-                      trailing: failTransaction != null
-                          ? null
-                          : Container(
-                              width: 60,
-                              height: 60,
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  border:
-                                      Border.all(width: 3, color: primaryColor),
-                                  borderRadius: BorderRadius.circular(100)),
-                              child: Text(
-                                counter < 10 ? "0$counter" : "$counter",
-                                style: const TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
+            const Center(
+              child: Text(
+                "Sécurisé avec DIGITAL PAY",
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            isReady
+                ? Container()
+                : Column(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          failTransaction == null
+                              ? "Veuillez composer *133# choisir puis  l'option 1 pour confirmer la transaction"
+                              : "Nous n'avons pas pu procéder à la vérification de votre transaction",
+                          style: TextStyle(
+                              color: failTransaction == null
+                                  ? Colors.black
+                                  : Colors.red),
+                          textAlign: TextAlign.center,
+                        ),
+                        trailing: failTransaction != null
+                            ? null
+                            : Container(
+                                width: 50,
+                                height: 50,
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    border:
+                                        Border.all(width: 3, color: primaryColor),
+                                    borderRadius: BorderRadius.circular(200)),
+                                child: Text(
+                                  counter < 10 ? "0$counter" : "$counter",
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
                               ),
+                      ),
+                      failTransaction != null
+                          ? Container()
+                          : SpinKitWave(
+                              color: secondaryColor,
+                              size: 20,
                             ),
-                    ),
-                    failTransaction != null
-                        ? Container()
-                        : SpinKitWave(
-                            color: secondaryColor,
-                            size: 20,
-                          ),
-                  ],
-                ),
-          Container(
-              width: MediaQuery.of(context).size.width - 60,
-              margin: const EdgeInsets.only(top: 10),
-              child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(primaryColor)),
-                  onPressed: !isReady
-                      ? null
-                      : () async {
-                          bool state = formKey.currentState!.validate();
-                          if (!state) {
-                            return;
-                          }
-                          if (failTransaction != null) {
-                            starTimer(idTransaction);
-                          } else {
-                            momoPaiementAction();
-                          }
-                        },
-                  child:
-                      Text((failTransaction != null) ? "Ressayer" : "PAYER")))
-        ],
+                    ],
+                  ),
+            Container(
+                width: MediaQuery.of(context).size.width - 60,
+                margin: const EdgeInsets.only(top: 10),
+                child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(primaryColor)),
+                    onPressed: !isReady
+                        ? null
+                        : () async {
+                            bool state = formKey.currentState!.validate();
+                            if (!state) {
+                              return;
+                            }
+                            if (failTransaction != null) {
+                              starTimer(idTransaction);
+                            } else {
+                              momoPaiementAction();
+                            }
+                          },
+                    child:
+                        Text((failTransaction != null) ? "Ressayer" : "PAYER")))
+          ],
+        ),
       ),
     );
   }
@@ -238,7 +241,7 @@ class _MomoWidgetState extends State<MomoWidget> {
             unloading(context, result);
           }
         } else if (value["status"] == "SUCCESSFUL") {
-          String message = "Transaction échouée!!!";
+          String message = "Transaction  effectuée !!!";
           Map result = {
             "code": "SUCCESS_TRANSACTION",
             "message": message,

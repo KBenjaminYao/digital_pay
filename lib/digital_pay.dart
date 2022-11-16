@@ -33,6 +33,7 @@ class DigitalPay {
     required accessToken,
     required amount,
     bool appBar = true,
+    Color color = Colors.transparent,
   }) async {
     try {
       Map result =
@@ -41,6 +42,7 @@ class DigitalPay {
           accessToken: accessToken,
           amount: amount,
           appBar: appBar,
+          color: color,
         );
       }));
       return result;
@@ -66,6 +68,9 @@ class HomeDPay extends StatefulWidget {
   /// Le montant [amount] de la transaction doit être supérieur à 10
   final int amount;
 
+  /// La couleur du formulaire [color]
+  final Color color;
+
   final Function(dynamic)? waitResponse;
   const HomeDPay({
     Key? key,
@@ -73,6 +78,7 @@ class HomeDPay extends StatefulWidget {
     required this.amount,
     required this.appBar,
     this.waitResponse,
+    required this.color,
   }) : super(key: key);
 
   @override
@@ -123,6 +129,7 @@ class _HomeDPayState extends State<HomeDPay> {
   @override
   void initState() {
     counter = maxTime;
+    formRouter("momo");
     Future.delayed(Duration.zero).then((value) {
       loading(context);
       ApiDCI.gestSellerInfo(widget.accessToken).then((value) {
@@ -131,6 +138,7 @@ class _HomeDPayState extends State<HomeDPay> {
           if (value.isNotEmpty) {
             setState(() {
               userInfo = value;
+              primaryColor = widget.color;
             });
           } else {
             if (mounted) {
@@ -189,6 +197,7 @@ class _HomeDPayState extends State<HomeDPay> {
       },
       child: WillPopScope(
           child: Scaffold(
+            backgroundColor: Colors.white,
             appBar: widget.appBar
                 ? AppBar(
                     backgroundColor: primaryColor,
@@ -197,9 +206,9 @@ class _HomeDPayState extends State<HomeDPay> {
                   )
                 : null,
             body: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: ListView(
+                physics: const BouncingScrollPhysics(),
                 children: [
                   SizedBox(
                     height: 80,
@@ -237,11 +246,14 @@ class _HomeDPayState extends State<HomeDPay> {
                     color: Colors.orange.withOpacity(.5),
                   ),
                   const SizedBox(height: 10),
-                  Text(
-                    numberFormat(widget.amount),
-                    textAlign: TextAlign.end,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 25),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      numberFormat(widget.amount),
+                      textAlign: TextAlign.end,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 25),
+                    ),
                   ),
                   const SizedBox(height: 5),
                   // MomoWidget(
