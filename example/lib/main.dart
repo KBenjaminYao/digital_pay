@@ -69,7 +69,8 @@ class _HomePageState extends State<HomePage> {
                 amount: 10000,
                 color: Colors.red
               ).then((result) {
-                print(result);
+                // ignore: avoid_print
+                (result);
                 toastMsg(result["message"]);
               });
             },

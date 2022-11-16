@@ -32,7 +32,6 @@ class _VisaWidgetState extends State<VisaWidget> {
                 isReady = true;
               });
               String uri = url!.host + url.path;
-              print(uri);
               if (uri == host) {
                 var data = await webViewController!.getHtml();
                 var document = parse(data);

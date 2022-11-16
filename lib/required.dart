@@ -75,7 +75,6 @@ class ApiDCI {
     try {
       var response = await http.get(Uri.parse(link), headers: _setHeaders());
       var result = response.body;
-      print(link);
       if (response.statusCode == 200 && result != "error") {
         return jsonDecode(result);
       } else {

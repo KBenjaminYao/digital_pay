@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:digital_pay/digital_pay.dart';
+import 'package:digital_pay/required.dart';
 import 'package:flutter/material.dart';
 
 //Secure all hhtp request with [https]
@@ -62,14 +63,15 @@ class _HomePageState extends State<HomePage> {
                 padding: MaterialStateProperty.all(
                     const EdgeInsets.symmetric(horizontal: 50))),
             onPressed: () {
-              //Launching the checkout request
               DigitalPay.checkout(
-                      context: context,
-                      accessToken: "MY_ACCESS_TOKEN",
-                      amount: 10)
-                  .then((result) {
-                //result of the request
-                print(result);
+                context: context,
+                accessToken: "MY_ACCESS_TOKEN",
+                amount: 10000,
+                color: Colors.red
+              ).then((result) {
+                // ignore: avoid_print
+                (result);
+                toastMsg(result["message"]);
               });
             },
             child: const Text(

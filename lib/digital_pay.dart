@@ -1,15 +1,11 @@
 library digital_pay;
 
 import 'dart:async';
-
-import 'package:country_picker/country_picker.dart';
 import 'package:digital_pay/components/momo.dart';
 import 'package:digital_pay/components/visa.dart';
 import 'package:digital_pay/components/wave.dart';
 import 'package:digital_pay/required.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:wc_form_validators/wc_form_validators.dart';
 
 import 'constant.dart';
 
