@@ -64,11 +64,11 @@ class _HomePageState extends State<HomePage> {
                     const EdgeInsets.symmetric(horizontal: 50))),
             onPressed: () {
               DigitalPay.checkout(
-                context: context,
-                accessToken: "MY_ACCESS_TOKEN",
-                amount: 10000,
-                color: Colors.red
-              ).then((result) {
+                      context: context,
+                      accessToken: "MY_ACCESS_TOKEN",
+                      amount: 10000,
+                      color: Colors.red)
+                  .then((result) {
                 // ignore: avoid_print
                 (result);
                 toastMsg(result["message"]);

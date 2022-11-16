@@ -43,7 +43,7 @@ class _VisaWidgetState extends State<VisaWidget> {
                     Map result = {
                       "code": "FAIL_TRANSACTION",
                       "message": "Transaction échouée!!!",
-                      "gt_msg" : reponse["gtpay_tranx_status_msg"]
+                      "gt_msg": reponse["gtpay_tranx_status_msg"]
                     };
                     unloading(context, result);
                   } else {

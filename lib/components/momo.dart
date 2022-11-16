@@ -84,7 +84,8 @@ class _MomoWidgetState extends State<MomoWidget> {
                               prefixIcon: const Icon(Icons.search),
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: const Color(0xFF8C98A8).withOpacity(0.2),
+                                  color:
+                                      const Color(0xFF8C98A8).withOpacity(0.2),
                                 ),
                               ),
                             ),
@@ -115,13 +116,13 @@ class _MomoWidgetState extends State<MomoWidget> {
                         12, "Veuillez renseigner un numéro correct"),
                     Validators.minLength(
                         12, "Veuillez renseigner un numéro correct"),
-                    Validators.patternRegExp(
-                        RegExp(RegExp.escape("05")), "Numéro $operator incorrect")
+                    Validators.patternRegExp(RegExp(RegExp.escape("05")),
+                        "Numéro $operator incorrect")
                   ]),
                   controller: contactController,
                   inputFormatters: [maskNumero],
-                  style:
-                      TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: primaryColor, fontWeight: FontWeight.bold),
                   keyboardType: TextInputType.phone,
                   decoration: const InputDecoration(
                     hintText: 'Numéro de téléphone',
@@ -166,8 +167,8 @@ class _MomoWidgetState extends State<MomoWidget> {
                                 alignment: Alignment.center,
                                 padding: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
-                                    border:
-                                        Border.all(width: 3, color: primaryColor),
+                                    border: Border.all(
+                                        width: 3, color: primaryColor),
                                     borderRadius: BorderRadius.circular(200)),
                                 child: Text(
                                   counter < 10 ? "0$counter" : "$counter",
@@ -192,7 +193,8 @@ class _MomoWidgetState extends State<MomoWidget> {
                 margin: const EdgeInsets.only(top: 10),
                 child: ElevatedButton(
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(primaryColor)),
+                        backgroundColor:
+                            MaterialStateProperty.all(primaryColor)),
                     onPressed: !isReady
                         ? null
                         : () async {
